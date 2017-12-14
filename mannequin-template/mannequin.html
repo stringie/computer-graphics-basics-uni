@@ -6,9 +6,9 @@
 	</head>
 	<body>
 		<h1>"Майка Валкирия"<br><small>ф.н. 81394 &ndash; група 3 &ndash; Антони Калоферов</small></h1>
-		<!-- <audio id="music" autoplay loop>
-				<source src="Wagner - RIDE OF THE VALKYRIES - Furtwangler-V92OBNsQgxU.mp3" type="audio/mpeg">
-		</audio> -->
+		<audio id="music" autoplay loop>
+				<source src="rideOfValkyries.mp3" type="audio/mpeg">
+		</audio>
 		<script>
 			// нагласяване на цвета и центрирането на текста с имената ви
 			document.getElementsByTagName('h1')[0].style = 'color:white; text-align:center; font-size:1.75em';
@@ -24,11 +24,8 @@
 			var sceneRotation = -Math.PI/3
 			scene.rotateY(sceneRotation);
 			camera = new THREE.PerspectiveCamera( 30, window.innerWidth/window.innerHeight, 0.1, 2000 );
-			camera.position.set(0,55,400);
-			// camera.lookAt(new THREE.Vector3(0,0,0));
-
-			helper = new THREE.AxisHelper(1000);
-			scene.add(helper);
+			camera.position.set(0,45,400);
+			// camera.lookAt(new THREE.Vector3(0,0,500));
 
 			// светлини
 			var light = new THREE.DirectionalLight('lightblue',0.8);
@@ -49,7 +46,7 @@
 			дете = мъжествен();
 			дете.scale.set(0.6,0.6,0.6);
 			дете.position.set(100, 0, 100);
-		
+
 			// функция за плавност, вместо cos или sin
 			// тя е доста подобна но не е циклична
 			smoothSigmoid = function(t, step) 
@@ -79,9 +76,7 @@
 
 				дете.lookAt(new THREE.Vector3(0, 0, 0));
 				дете.rotateOnAxis(new THREE.Vector3(0, 1, 0), -Math.PI/2);
-				дете.глава.rotation.x = headRotation.x;
-				дете.глава.rotation.y = headRotation.y; 
-				дете.глава.rotation.z = headRotation.z;
+				дете.глава.rotation.copy(headRotation);
 				
 				if (майка.position.x - майка.position.z >= -33.3) {
 					дете.глава.rotation.y += sceneRotation;
@@ -107,6 +102,23 @@
 					майка.л_китка.врът(0,smoothSigmoid(t-1300, 110)*(t-790)*80,90);
 					майка.д_китка.врът(0,smoothSigmoid(t-1300, 110)*(t-790)*80,90);
 				}
+
+				if (t > 1500 && t < 1600) {
+					дете.д_ръка.врът(0,smoothSigmoid(t-1550, 10)*-10,smoothSigmoid(t-1550,10)*-50);
+					дете.л_ръка.врът(0,smoothSigmoid(t-1550, 10)*10,smoothSigmoid(t-1550, 10)*-50);
+					дете.л_китка.врът(0,smoothSigmoid(t-1550, 10)*-110,0);
+					дете.д_китка.врът(0,smoothSigmoid(t-1550, 10)*-80,0);
+					дете.л_лакът.врът(0,0,smoothSigmoid(t-1550, 10)*-90);
+					дете.д_лакът.врът(0,0,smoothSigmoid(t-1550, 10)*-90);
+				}
+
+				if (t > 1590) {
+					дете.д_лакът.врът(0,Math.sin(t/7)*15 - 7.5,-90);
+					дете.л_лакът.врът(0,Math.sin(t/7)*-15 + 7.5, -90);
+					дете.д_китка.врът(0,-80,Math.sin(t/7)*-15 + 18.5);
+					дете.л_китка.врът(0,-110,Math.sin(t/7)*15 - 18.5);
+				}
+					
 
 				// за полет като истински хеликоптер + леко лющкане на краката
 				if (t>1000 && t < 2500) {
@@ -142,8 +154,7 @@
 					майка.д_крак.врът(Math.sin(t/10),0, Math.cos(t/7));
 					майка.л_крак.врът(Math.cos(t/10),0, Math.sin(t/7));
 				}
-			}
-				
+			}				
 		drawFrame();
 		</script>
 	</body>
